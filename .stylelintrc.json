@@ -10,7 +10,7 @@
     "declaration-block-semicolon-newline-after": "always",
     "declaration-block-trailing-semicolon": "always",
     "indentation": 2,
-    "max-empty-lines": 2,
+    "max-empty-lines": 4,
     "max-nesting-depth": [3, {
       "ignore": ["pseudo-classes"]
     }],
