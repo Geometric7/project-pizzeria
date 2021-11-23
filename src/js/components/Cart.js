@@ -14,10 +14,10 @@ class Cart {
     thisCart.dom = {};
     thisCart.dom.wrapper = element;
     thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
-    thisCart.dom.productList = document.querySelector(select.cart.productList); 
+    thisCart.dom.productList = document.querySelector(select.cart.productList);
     thisCart.dom.deliveryFee = document.querySelector(select.cart.deliveryFee);
     thisCart.dom.subtotalPrice = document.querySelector(select.cart.subtotalPrice);
-    thisCart.dom.totalPrice = document.querySelectorAll(select.cart.totalPrice); 
+    thisCart.dom.totalPrice = document.querySelectorAll(select.cart.totalPrice);
     thisCart.dom.totalNumber = document.querySelector(select.cart.totalNumber);
     thisCart.dom.form = document.querySelector(select.cart.form);
     thisCart.dom.address = document.querySelector(select.cart.address);
@@ -25,7 +25,7 @@ class Cart {
   }
   initActions(){
     const thisCart = this;
-    thisCart.dom.toggleTrigger.addEventListener('click', function() 
+    thisCart.dom.toggleTrigger.addEventListener('click', function()
     {
       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
     });
@@ -43,7 +43,7 @@ class Cart {
       console.log('thisCart.products', thisCart.products);
       thisCart.update();
     });
-    thisCart.dom.form.addEventListener('submit', function(event){ 
+    thisCart.dom.form.addEventListener('submit', function(event){
       event.preventDefault();
       thisCart.sendOrder();
     });
@@ -59,21 +59,21 @@ class Cart {
   update() {
     const thisCart = this;
     const deliveryFee = settings.cart.defaultDeliveryFee;
-    let totalNumber = 0; 
-    let subtotalPrice = 0; 
+    let totalNumber = 0;
+    let subtotalPrice = 0;
     for(let product of thisCart.products){
       totalNumber = totalNumber + product.amountWidget.value;
       subtotalPrice = subtotalPrice + product.priceSingle * product.amountWidget.value;
       thisCart.dom.subtotalPrice.innerHTML = subtotalPrice;
       thisCart.dom.totalNumber.innerHTML = totalNumber;
     }
-    if(thisCart.products.length ==0) 
+    if(thisCart.products.length ==0)
     {
-      thisCart.totalPrice = 0;  
+      thisCart.totalPrice = 0;
       thisCart.subtotalPrice = 0;
       thisCart.totalNumber = 0;
       thisCart.deliveryFee = 0;
-      thisCart.dom.totalNumber.innerHTML = 0; 
+      thisCart.dom.totalNumber.innerHTML = 0;
       thisCart.dom.subtotalPrice.innerHTML = 0;
       thisCart.dom.deliveryFee.innerHTML = 0;
       thisCart.dom.totalPrice.forEach(element => element.innerHTML = 0);
@@ -92,8 +92,8 @@ class Cart {
     const thisCart = this;
     // eslint-disable-next-line no-unused-vars
     const url = settings.db.url + '/' + settings.db.orders;
-    
-    const payload =  
+
+    const payload =
     {
       address: thisCart.dom.address.value,
       phone: thisCart.dom.phone.value,
@@ -104,7 +104,7 @@ class Cart {
       products: []
     };
 
-    
+
     for(let prod of thisCart.products){
       payload.products.push(prod.getData());
     }
@@ -115,7 +115,7 @@ class Cart {
       },
       body: JSON.stringify(payload),
     };
-    
+
     fetch(url, options)
       .then(function(response){
         return response.json();
@@ -124,4 +124,5 @@ class Cart {
       });
   }
 }
+
 export default Cart;
