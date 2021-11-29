@@ -14,10 +14,10 @@ class Booking{
   }
   getData(){
     const thisBooking = this;
-    
-    const startDateParam = settings.db.dateStartParamKey + '=' + utils.dateToStr(thisBooking.dateWidget.minDate); 
+
+    const startDateParam = settings.db.dateStartParamKey + '=' + utils.dateToStr(thisBooking.dateWidget.minDate);
     const endDateParam = settings.db.dateEndParamKey + '=' + utils.dateToStr(thisBooking.dateWidget.maxDate);
-    
+
     const params = {
       bookings: [
         startDateParam,
@@ -35,11 +35,11 @@ class Booking{
     };
 
     const  urls = {
-      booking:       settings.db.url + '/' + settings.db.booking 
+      booking:       settings.db.url + '/' + settings.db.booking
                                      + '?' + params.bookings.join('&'),
-      eventsCurrent: settings.db.url + '/' + settings.db.event   
+      eventsCurrent: settings.db.url + '/' + settings.db.event
                                      + '?' + params.eventsCurrent.join('&'),
-      eventsRepeat:  settings.db.url + '/' + settings.db.event   
+      eventsRepeat:  settings.db.url + '/' + settings.db.event
                                      + '?' + params.eventsRepeat.join('&'),
     };
     Promise.all([
@@ -55,7 +55,7 @@ class Booking{
         eventsCurrentResponse.json(),
         eventsRepeatResponse.json(),
       ]);
-      
+
     }).then(function([bookings, eventsCurrent, eventsRepeat]){
       thisBooking.parseData(bookings, eventsCurrent, eventsRepeat);
     });
@@ -84,26 +84,26 @@ class Booking{
       }
     }
     thisBooking.updateDOM();
-  }  
+  }
   makeBooked(date, hour, duration, table){
     const thisBooking = this;
-      
+
     if(typeof thisBooking.booked[date] == 'undefined'){
       thisBooking.booked[date] = {};
     }
 
     const startHour = utils.hourToNumber(hour);
-      
+
     for(let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5){
       if(typeof thisBooking.booked[date][hourBlock] == 'undefined'){
         thisBooking.booked[date][hourBlock] = [];
       }
-  
+
       thisBooking.booked[date][hourBlock].push(table);
     }
     thisBooking.updateDOM();
   }
-  
+
   updateDOM(){
     const thisBooking = this;
 
@@ -127,7 +127,7 @@ class Booking{
       }
       if(
         !allAvailable
-        && 
+        &&
         thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)
       ){
         table.classList.add(classNames.booking.tableBooked);
@@ -170,7 +170,7 @@ class Booking{
     thisBooking.dom.wrapper.addEventListener('updated', function(event){
       event.preventDefault();
       thisBooking.updateDOM();
-      
+
       if(thisBooking.pickedTableId !== null){
         thisBooking.selectedTable.classList.remove(classNames.table.selected);
         thisBooking.pickedTableId = null;
@@ -184,7 +184,7 @@ class Booking{
       event.preventDefault();
       thisBooking.updateDOM();
       thisBooking.selectedTable = event.target;
-      
+
       const tableId = thisBooking.selectedTable.getAttribute('data-table');
       const isItTable = thisBooking.selectedTable.classList.contains('table');
       const isTableBooked = thisBooking.selectedTable.classList.contains('booked');
@@ -218,7 +218,7 @@ class Booking{
       }
     });
 
-    thisBooking.dom.bookingForm.addEventListener('submit', function(event){ 
+    thisBooking.dom.bookingForm.addEventListener('submit', function(event){
       event.preventDefault();
       thisBooking.sendBooking();
     });
@@ -228,12 +228,12 @@ class Booking{
 
     // eslint-disable-next-line no-unused-vars
     const url = settings.db.url + '/' + settings.db.booking;
-    
+
     // eslint-disable-next-line no-unused-vars
-   
+
     const payload = {
       date: thisBooking.dateWidget.correctValue,
-      hour: thisBooking.hourWidget.correctValue, 
+      hour: thisBooking.hourWidget.correctValue,
       table: parseInt(thisBooking.pickedTableId),
       duration: parseInt(thisBooking.hoursAmountWidget.correctValue),
       ppl: parseInt(thisBooking.peopleAmount.value),
@@ -241,13 +241,13 @@ class Booking{
       phone: thisBooking.dom.phoneInput.value,
       address: thisBooking.dom.addressInput.value,
     };
-   
+
     for(let starter of thisBooking.dom.starters){
       if (starter.checked == true){
         payload.starters.push(starter.value);
       }
     }
-  
+
     const options = {
       method: 'POST',
       headers: {
@@ -256,15 +256,18 @@ class Booking{
       body: JSON.stringify(payload),
     };
 
-    
+
     fetch(url, options)
       .then(function(response){
         return response.json();
       }).then(function(parsedResponse){
         console.log('parsedResponse', parsedResponse);
         thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
+      }).then(function(){
+        thisCart.products = [];
+        thisCart.update();
       });
-    
+
   }
 }
 export default Booking;
