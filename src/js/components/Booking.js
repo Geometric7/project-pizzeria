@@ -260,12 +260,14 @@ class Booking{
     fetch(url, options)
       .then(function(response){
         return response.json();
-      }).then(function(parsedResponse){
+      })
+      //.then(function(){
+      //thisCart.products = [];
+      //thisCart.update();
+      //})
+      .then(function(parsedResponse){
         console.log('parsedResponse', parsedResponse);
         thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
-      }).then(function(){
-        thisCart.products = [];
-        thisCart.update();
       });
 
   }
