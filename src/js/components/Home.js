@@ -1,7 +1,11 @@
-import {templates, select, classNames} from '../settings.js'; 
+import {
+  templates,
+  select,
+  classNames
+} from '../settings.js';
 
-class Home{
-  constructor(element){
+class Home {
+  constructor(element) {
     const thisHome = this;
     console.log('thisHome', thisHome);
     thisHome.render(element);
@@ -9,15 +13,15 @@ class Home{
     thisHome.initCarousel();
   }
 
-  render(element){
+  render(element) {
     const thisHome = this;
     const generatedHTML = templates.home();
     thisHome.dom = {};
     thisHome.dom.wrapper = element;
     thisHome.dom.wrapper.innerHTML = generatedHTML;
   }
-  
-  activatePage(pageId){
+
+  /*activatePage(pageId){
     const thisHome = this;
 
     thisHome.pages = document.querySelector(select.containerOf.pages).children;
@@ -30,14 +34,14 @@ class Home{
       link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
     }
 
-  }
-  initLinks(){
+  }*/
+  initLinks() {
     const thisHome = this;
-    
+
     thisHome.links = document.querySelectorAll('.link');
-  
-    for(let link of thisHome.links){
-      link.addEventListener('click', function(event){
+
+    for (let link of thisHome.links) {
+      link.addEventListener('click', function(event) {
         event.preventDefault;
 
         const clickedLink = this;
@@ -48,9 +52,9 @@ class Home{
     }
   }
 
-  initCarousel(){
+  initCarousel() {
     const thisHome = this;
-    
+
     // eslint-disable-next-line no-undef
     thisHome.flickity = new Flickity('.main-carousel', {
       // options
@@ -61,6 +65,31 @@ class Home{
       prevNextButtons: false
     });
   }
+}
+
+class Router {
+
+  constructor(element) {
+
+    const thisHome = this;
+    console.log('thisHome', thisHome);
+    thisHome.render(element);
+    thisHome.initLinks();
+    thisHome.initCarousel();
+  }
+  activatePage(pageId) {
+    thisHome.pages = document.querySelector(select.containerOf.pages).children;
+    thisHome.navLinks = document.querySelectorAll(select.nav.links);
+
+    for (let page of thisHome.pages) {
+      page.classList.toggle(classNames.pages.active, page.id == pageId);
+    }
+    for (let link of thisHome.navLinks) {
+      link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
+    }
+
+  }
+
 }
 
 export default Home;
