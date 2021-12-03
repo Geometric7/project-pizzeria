@@ -21,7 +21,7 @@ class Home {
     thisHome.dom.wrapper.innerHTML = generatedHTML;
   }
 
-  /*activatePage(pageId){
+  activatePage(pageId){
     const thisHome = this;
 
     thisHome.pages = document.querySelector(select.containerOf.pages).children;
@@ -34,7 +34,7 @@ class Home {
       link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
     }
 
-  }*/
+  }
   initLinks() {
     const thisHome = this;
 
